@@ -1,0 +1,231 @@
+var contactos = [
+  { nombre: "Macarena Poo García", 
+    empresa: "Retail Zipline", 
+    email: "macarenapoo@gmail.com", 
+    telefono: "5556801216" },
+  { nombre: "Juan Fernando Donoso", 
+    empresa: "Universidad Iberoamericana", 
+    email: "juan.donoso@uia.mx", 
+    telefono: "5555555555" }
+];
+
+var modal = document.getElementById('modal');
+
+window.onclick = function(event){
+	if (event.target == modal){
+		modal.style.display = "none";
+	}
+}
+////////////////////////////////////
+
+ function validacion(){
+  
+  var mail = document.getElementById("email").value;
+  
+
+  var primera = validarLongitud(mail);
+
+  var segunda = validarPrimerCaracter(mail);
+  
+
+  var tercera = validarArroba(mail);
+  
+  var cuarta = validarDominio(mail);
+
+  var nomvre = document.getElementById("nombre").value;
+  var macuilli = validarNombre(nomvre);
+  
+
+
+
+  if (primera){ 
+  
+      document.getElementById("msg1").innerHTML="El número de caracteres es valido";
+      document.getElementById("msg1").style.color="#008000";
+  }else{
+    
+      document.getElementById("msg1").innerHTML="El número de caracteres debe ser un mínimo de 6";
+      document.getElementById("msg1").style.color="#CC0000";
+  }
+
+  
+  
+  if (segunda){
+    
+      document.getElementById("msg2").innerHTML="El primer caracter es una letra";
+      document.getElementById("msg2").style.color="#008000";
+  }else{
+    
+      document.getElementById("msg2").innerHTML="El primer caracter debe ser una letra";
+      document.getElementById("msg2").style.color="#CC0000";
+  }
+ 
+  
+  
+  if (tercera){
+  
+      document.getElementById("msg3").innerHTML="Existe una sola @";
+      document.getElementById("msg3").style.color="#008000";
+  }else{
+ 
+      document.getElementById("msg3").innerHTML="Existe más de una @";
+      document.getElementById("msg3").style.color="#CC0000";
+  }
+ 
+  
+  
+  if (cuarta){
+  
+      document.getElementById("msg4").innerHTML="El dominio es valido";
+      document.getElementById("msg4").style.color="#008000";
+  }else{
+ 
+      document.getElementById("msg4").innerHTML="El dominio no es válido";
+      document.getElementById("msg4").style.color="#CC0000";
+  }
+ 
+  
+  
+  if (macuilli){ 
+    document.getElementById("c1").innerHTML="El campo es válido";
+  document.getElementById("c1").style.color="#008000";
+    
+}else{
+  document.getElementById("c1").innerHTML="El campo es inválido";
+  document.getElementById("c1").style.color="#CC0000";
+
+}
+
+ if(primera && segunda && tercera && cuarta && macuilli){
+   agregar();
+ }
+
+
+}
+function validarNombre(nombree){
+  var n = nombree.length;
+  if (n >= 1){
+      return true;
+  } else {
+      return false;
+  }
+}
+function validarLongitud(correo){
+  var n = correo.length;
+  if (n >= 6){
+      return true;
+  } else {
+      return false;
+  }
+}
+
+function validarPrimerCaracter(correo){
+if ((correo.charCodeAt(0) >= 65 && correo.charCodeAt(0) <= 90) || (correo.charCodeAt(0) >= 97 && correo.charCodeAt(0) <= 122)){
+  return true;
+}else{
+  return false;
+}
+
+}
+
+function validarArroba(correo){
+  var cuantasArrobas = 0;
+  var posArroba = 0;
+  for (var i=0; i<correo.length; i++){
+    if (correo.charAt(i) == "@"){
+      cuantasArrobas++;
+      posArroba = i;
+    }
+  }
+  
+  if (cuantasArrobas == 1){
+    if (posArroba >=1 && posArroba <= correo.length - 5){
+      return true;
+    }else{
+      return false;
+    }
+  }else{
+    return false;
+  }	
+}
+
+
+function validarDominio(correo){
+
+var pos = correo.lastIndexOf(".");
+if ((correo.length-1 - pos >=2) && (correo.length-1 - pos <=4)){
+  for (var i=pos+1; i<correo.length; i++){
+    if (correo.charCodeAt(i)<65 || (correo.charCodeAt(i)>90 && correo.charCodeAt(i) < 97) || correo.charCodeAt(i) > 122){
+      return false;
+    }
+  }
+  return true;
+}else{
+  return false;
+}
+
+}
+
+function imprimirContactos(contacto, index){
+var contactos = document.getElementById("contactos");
+contactos.insertAdjacentHTML('beforeend',
+
+`<li class="contacto">
+<div class="actions">
+  <a><i class="fa fa-trash" onclick="eliminarContacto(`+ index +`)"></i></a>
+</div>
+<i class="userIcon fa fa-user"></i>
+<h4 class="nombre">`+contacto.nombre+ `</h4>
+<div class="datos">
+  <div class="dato">
+    <i class="fa fa-building"></i>
+    <span>`+contacto.empresa+`</span>
+  </div>
+  <div class="dato">
+    <i class="fa fa-envelope"></i>
+    <a href="mailto:`+ contacto.email +`">`+contacto.email+`</a>
+  </div>
+  <div class="dato">
+    <i class="fa fa-phone"></i>
+    <a href="tel:`+ contacto.telefono +`">`+contacto.telefono+`</a>
+  </div>
+</div>
+</li>`
+);
+}
+
+function eliminarContacto(index) {
+ contactos.splice(index, 1);
+  imprimirtodoslosContactos();
+}
+function imprimirtodoslosContactos() {
+  document.getElementById("contactos").innerHTML = "";
+  contactos.forEach(imprimirContactos);
+}
+function agregar() {
+  
+  var apeller = document.getElementById("nombre").value;
+  var business = document.getElementById("empresa").value;
+  var correo = document.getElementById("email").value;
+  var tel = document.getElementById("telefono").value;
+  var Datos = { 
+      nombre:apeller, empresa:business, email:correo, telefono:tel
+  };
+  
+  contactos.push(Datos);
+  imprimirtodoslosContactos();
+}
+
+
+function vaciar(){
+   document.getElementById("nombre").value='';
+  document.getElementById("empresa").value='';
+  document.getElementById("email").value='';
+  document.getElementById("telefono").value='';
+  document.getElementById("msg1").innerHTML="";
+  document.getElementById("msg2").innerHTML="";
+  document.getElementById("msg3").innerHTML="";
+  document.getElementById("msg4").innerHTML="";
+  document.getElementById("c1").innerHTML="";
+}
+  imprimirtodoslosContactos();
